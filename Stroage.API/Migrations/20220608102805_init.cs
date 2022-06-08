@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Stroage.API.Migrations
 {
-    public partial class fullModels : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,7 +76,6 @@ namespace Stroage.API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    StoreHouesId = table.Column<int>(type: "int", nullable: false),
                     StorehouseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -98,10 +97,10 @@ namespace Stroage.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsIn = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    PersonId = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     PackId = table.Column<int>(type: "int", nullable: false),
-                    BinId = table.Column<int>(type: "int", nullable: false),
-                    PersonId = table.Column<string>(type: "nvarchar(20)", nullable: true)
+                    BinId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,7 +121,8 @@ namespace Stroage.API.Migrations
                         name: "FK_ActionLogs_People_PersonId",
                         column: x => x.PersonId,
                         principalTable: "People",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

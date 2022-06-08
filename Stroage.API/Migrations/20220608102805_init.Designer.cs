@@ -12,8 +12,8 @@ using Stroage.API.Models;
 namespace Stroage.API.Migrations
 {
     [DbContext(typeof(StorageContext))]
-    [Migration("20220608093057_fullModels")]
-    partial class fullModels
+    [Migration("20220608102805_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,11 +45,11 @@ namespace Stroage.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PersonId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -74,9 +74,6 @@ namespace Stroage.API.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("StoreHouesId")
-                        .HasColumnType("int");
 
                     b.Property<int>("StorehouseId")
                         .HasColumnType("int");
@@ -184,7 +181,9 @@ namespace Stroage.API.Migrations
 
                     b.HasOne("Stroage.API.Models.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("PersonId");
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Bin");
 
@@ -196,7 +195,7 @@ namespace Stroage.API.Migrations
             modelBuilder.Entity("Stroage.API.Models.Bin", b =>
                 {
                     b.HasOne("Stroage.API.Models.Storehouse", "Storehouse")
-                        .WithMany()
+                        .WithMany("Bins")
                         .HasForeignKey("StorehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -213,6 +212,11 @@ namespace Stroage.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("Stroage.API.Models.Storehouse", b =>
+                {
+                    b.Navigation("Bins");
                 });
 #pragma warning restore 612, 618
         }

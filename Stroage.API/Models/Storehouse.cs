@@ -10,5 +10,7 @@ namespace Stroage.API.Models
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
+        public virtual List<Bin> Bins { get; set; }
     }
 }
