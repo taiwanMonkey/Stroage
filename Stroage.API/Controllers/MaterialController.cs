@@ -21,6 +21,9 @@ namespace Stroage.API.Controllers
             var m = _context.Materials.FirstOrDefault(x => x.Description == description);
             if (m is not null)
                 return BadRequest("此物料已定義");
+            type = type.ToUpper();
+            if (type != "SMT" && type != "DIP")
+                return BadRequest("未知的物料類別");
             
             Material material = new()
             {

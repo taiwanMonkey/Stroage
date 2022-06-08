@@ -14,6 +14,7 @@ namespace Stroage.API.Models
 
         [StringLength(20)]
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }
