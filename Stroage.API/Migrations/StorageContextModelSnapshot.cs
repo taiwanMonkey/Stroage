@@ -68,15 +68,23 @@ namespace Stroage.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("InTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int?>("PackId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StorehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PackId");
 
                     b.HasIndex("StorehouseId");
 
@@ -192,11 +200,17 @@ namespace Stroage.API.Migrations
 
             modelBuilder.Entity("Stroage.API.Models.Bin", b =>
                 {
+                    b.HasOne("Stroage.API.Models.Pack", "Pack")
+                        .WithMany()
+                        .HasForeignKey("PackId");
+
                     b.HasOne("Stroage.API.Models.Storehouse", "Storehouse")
                         .WithMany("Bins")
                         .HasForeignKey("StorehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Pack");
 
                     b.Navigation("Storehouse");
                 });
@@ -204,12 +218,17 @@ namespace Stroage.API.Migrations
             modelBuilder.Entity("Stroage.API.Models.Pack", b =>
                 {
                     b.HasOne("Stroage.API.Models.Material", "Material")
-                        .WithMany()
+                        .WithMany("Packs")
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("Stroage.API.Models.Material", b =>
+                {
+                    b.Navigation("Packs");
                 });
 
             modelBuilder.Entity("Stroage.API.Models.Storehouse", b =>

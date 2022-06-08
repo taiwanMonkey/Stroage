@@ -10,6 +10,7 @@ namespace Stroage.API.Models
 
         [MaxLength(200)]
         public string? Description { get; set; }
-        public virtual MaterialType Type { get; set; }
+        public MaterialType Type { get; set; }
+        public virtual List<Pack>? Packs { get; set; }
     }
 }

@@ -76,11 +76,18 @@ namespace Stroage.API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    StorehouseId = table.Column<int>(type: "int", nullable: false)
+                    StorehouseId = table.Column<int>(type: "int", nullable: false),
+                    InTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PackId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bins_Pack_PackId",
+                        column: x => x.PackId,
+                        principalTable: "Pack",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bins_Storehouses_StorehouseId",
                         column: x => x.StorehouseId,
@@ -110,19 +117,19 @@ namespace Stroage.API.Migrations
                         column: x => x.BinId,
                         principalTable: "Bins",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_ActionLogs_Pack_PackId",
                         column: x => x.PackId,
                         principalTable: "Pack",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_ActionLogs_People_PersonId",
                         column: x => x.PersonId,
                         principalTable: "People",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -139,6 +146,11 @@ namespace Stroage.API.Migrations
                 name: "IX_ActionLogs_PersonId",
                 table: "ActionLogs",
                 column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bins_PackId",
+                table: "Bins",
+                column: "PackId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bins_StorehouseId",
@@ -160,10 +172,10 @@ namespace Stroage.API.Migrations
                 name: "Bins");
 
             migrationBuilder.DropTable(
-                name: "Pack");
+                name: "People");
 
             migrationBuilder.DropTable(
-                name: "People");
+                name: "Pack");
 
             migrationBuilder.DropTable(
                 name: "Storehouses");

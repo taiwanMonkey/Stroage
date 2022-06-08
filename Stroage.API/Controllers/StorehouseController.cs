@@ -16,7 +16,8 @@ namespace Stroage.API.Controllers
         [HttpGet]
         public IEnumerable<Storehouse> Get()
         {
-            return _context.Storehouses.ToArray();
+            var houses = _context.Storehouses.Include(x => x.Bins).ToList();
+            return houses;
         }
 
         [HttpPost]
@@ -25,7 +26,8 @@ namespace Stroage.API.Controllers
             Storehouse house = _context.Storehouses.FirstOrDefault(sh => sh.Name == name);
             if (house != null)
                 return BadRequest("重複的倉庫名。");
-
+            if (capacity > 1024)
+                return BadRequest("庫位量不可超過1024。");
             house = new Storehouse()
             {
                 Name = name,
@@ -35,7 +37,7 @@ namespace Stroage.API.Controllers
             {
                 house.Bins.Add(new Bin()
                 {
-                    Name = $"{name}.{i}",
+                    Name = $"{name}.{i:D4}",
                 });
             }
             _context.Storehouses.Add(house);

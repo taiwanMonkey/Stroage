@@ -11,6 +11,6 @@ namespace Stroage.API.Models
         public int MaterialId { get; set; }
         [Required]
         public int Quantity { get; set; }
-        public virtual Material Material { get; set; }
+        public virtual Material? Material { get; set; }
     }
 }
