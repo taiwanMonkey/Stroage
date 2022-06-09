@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stroage.API.RequestModels;
 
 namespace Stroage.API.Controllers
 {
@@ -14,9 +15,25 @@ namespace Stroage.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Storehouse> Get()
+        public IEnumerable<StorehouseDetail> Get()
         {
-            var houses = _context.Storehouses.Include(x => x.Bins).ToList();
+            var houses = _context.Storehouses
+                .Include(x => x.Bins)
+                .ThenInclude(b => b.Pack)
+                .ThenInclude(p => p.Material)
+                .Select(h => new StorehouseDetail
+                {
+                    Name = h.Name,
+                    Id = h.Id,
+                    Bins = h.Bins.Select(b => new BinDetail
+                                { 
+                                  BinName = b.Name, 
+                                  Id = b.Id,
+                                  MaterialDesc = b.Pack.Material.Description,
+                                  Quantity = b.Pack.Quantity
+                                })
+                })
+                .ToList();
             return houses;
         }
 

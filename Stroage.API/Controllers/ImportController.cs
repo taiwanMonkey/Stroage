@@ -4,6 +4,9 @@ using Stroage.API.RequestModels;
 
 namespace Stroage.API.Controllers
 {
+    /// <summary>
+    /// 入庫
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ImportController : ControllerBase
@@ -27,7 +30,7 @@ namespace Stroage.API.Controllers
 
             Person? user = await _context.People.FirstOrDefaultAsync(p => p.Id == model.PersonId && p.Password == model.Password);
             if (user is null)
-                return BadRequest("帳號或密碼錯誤");
+                return Unauthorized("帳號或密碼錯誤");
 
             Material? material = await _context.Materials.FirstOrDefaultAsync(m => m.Description == model.MaterialDescirption);
             if (material is null)
@@ -36,6 +39,8 @@ namespace Stroage.API.Controllers
             Bin? bin = await _context.Bins.FirstOrDefaultAsync(b => b.Name == model.BinName);
             if (bin is null)
                 return BadRequest("查無此庫位碼");
+            if (bin.PackId > 0)
+                return BadRequest("此庫位已有物料，請使用其他庫位");
 
             Pack pack = new Pack()
             {
@@ -57,7 +62,14 @@ namespace Stroage.API.Controllers
             };
             _context.ActionLogs.Add(actionLog);
             await _context.SaveChangesAsync();
-            return Ok(actionLog);
+            return Ok(new
+                { 
+                    UserId = user.Id, 
+                    BinName = bin.Name, 
+                    MaterialDesc = material.Description, 
+                    Quantity = pack.Quantity,
+                    Time = actionLog.CreateTime
+                });
         }
     }
 }

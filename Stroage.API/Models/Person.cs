@@ -9,7 +9,6 @@ namespace Stroage.API.Models
         public string Id { get; set; }
 
         [StringLength(50)]
-        [Required]
         public string Name { get; set; }
 
         [StringLength(20)]
