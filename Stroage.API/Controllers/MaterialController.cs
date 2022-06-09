@@ -18,12 +18,17 @@ namespace Stroage.API.Controllers
         [HttpPost]
         public IActionResult Create(string description, string type)
         {
-            var m = _context.Materials.FirstOrDefault(x => x.Description == description);
-            if (m is not null)
-                return BadRequest("此物料已定義");
+            bool inValid = string.IsNullOrEmpty(description) || description.Length > 200 || string.IsNullOrEmpty(type);
+            if (inValid)
+                return BadRequest(ModelState);
+
             type = type.ToUpper();
             if (type != "SMT" && type != "DIP")
                 return BadRequest("未知的物料類別");
+
+            Material? m = _context.Materials.FirstOrDefault(x => x.Description == description);
+            if (m is not null)
+                return BadRequest("此物料已定義");
             
             Material material = new()
             {

@@ -23,6 +23,11 @@ namespace Stroage.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string name, int capacity)
         {
+            bool inValid = string.IsNullOrEmpty(name) || name.Length > 50 || capacity < 0;
+            if(inValid)
+                return BadRequest(ModelState);
+
+
             Storehouse house = _context.Storehouses.FirstOrDefault(sh => sh.Name == name);
             if (house != null)
                 return BadRequest("重複的倉庫名。");
