@@ -21,7 +21,7 @@ namespace Stroage.API.Controllers
             if (!beginTime.HasValue)
                 beginTime = DateTime.Now.AddDays(-7);
             if (!endTime.HasValue)
-                endTime = DateTime.Now;            
+                endTime = DateTime.Now;
             var logs = await _context.ActionLogs
                 .Include(l => l.Person)
                 .Include(l => l.Pack)

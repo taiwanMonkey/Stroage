@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    string hint = ViewBag.Hint;
+}
+<div class="container-fluid">
+
+    <div class="row mt-5">
+        <div class="col col-sm-2 col-lg-3""></div>
+        <div class="col col-sm-8 col-lg-4 bg-light p-3">
+
+            <h2>註冊</h2>
+            @if(hint != "empty")
+            {
+                <p class="text-danger">@hint</p>
+            }
+            <form method="post" asp-action="onRegister">
+                <label for="id" class=" text-muted">帳號</label>&emsp;&emsp;
+                <input name="id" type="text" maxlength="20" class="form-control mb-2 w-100" required/>
+                <br />
+                <lable for="name" class="">名子</lable>&emsp;&emsp;
+                <input name="name" type="text" maxlength="50" class="form-control mb-2 w-100" required/>
+                <br />
+                <lable for="password" class="mb-3">密碼</lable>&emsp;&emsp;
+                <input name="password" type="password" maxlength="20" class="form-control mb-2 w-100" required/>
+                <br />
+                <lable for="confirmPassword" class="">密碼確認</lable>
+                <input name="confirmPassword" type="password" maxlength="20" class="form-control mb-2 w-100" required/>
+                <br/>
+                <input  type="submit" class="btn btn-primary float-end mb-3" value="註冊"/> 
+            </form>
+        </div>
+        <div class="col col-sm-2 col-lg-3"></div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+﻿@using Stroage.API.RequestModels
+@{
+    ViewData["Title"] = "Home Page";
+    string msg = ViewBag.Msg;
+    List<StorehouseDetail>? storehouses = ViewBag.Storehouses;
+}
+
+<div class="text-center">
+    <h1 class="display-4">庫存</h1>
+    <p class="visually-hidden">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>@msg</p>
+        @if(storehouses is not null ){
+            foreach(StorehouseDetail house in storehouses)
+            {
+                <h2>@house.Name</h2>
+                <div class="container">
+                    <div class="row ">
+                        @foreach(BinDetail bin in house.Bins)
+                        {
+                            if(string.IsNullOrEmpty(bin.MaterialDesc))
+                            {
+                                <a href="http" >
+                                    <div class="bins col bg-secondary text-light m-1 pt-2 pb-2 rounded hover-overlay ripple pb-4">
+                                        @bin.BinName<br>
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <div class="bins col bg-primary text-light m-1 pt-2 pb-2 rounded hover-overlay ripple">
+                                        @bin.BinName<br>@bin.MaterialDesc: @bin.Quantity
+                                </div>
+                            }
+                            
+                        }
+                    </div>
+                </div>
+            }
+        }
+</div>
+

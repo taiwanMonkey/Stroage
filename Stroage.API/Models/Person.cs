@@ -15,5 +15,7 @@ namespace Stroage.API.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public Guid? Token { get; set; }
     }
 }

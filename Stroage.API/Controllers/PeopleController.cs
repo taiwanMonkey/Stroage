@@ -39,5 +39,21 @@ namespace Stroage.API.Controllers
             var pps = _context.People.ToArray();
             return pps;
         }
+
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login(string id, string password)
+        {
+            Person? p = _context.People.FirstOrDefault(p => p.Id == id && p.Password == password);
+            if (p is null)
+                return NotFound();
+
+            Guid token = Guid.NewGuid();
+            p.Token = token;
+            _context.SaveChanges();
+            return Ok(token);
+        }
+
+ 
     }
 }
