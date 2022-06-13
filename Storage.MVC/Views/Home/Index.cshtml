@@ -1,11 +1,11 @@
 ﻿@using Stroage.API.RequestModels
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "首頁(庫存)";
     string msg = ViewBag.Msg;
     List<StorehouseDetail>? storehouses = ViewBag.Storehouses;
 }
 
-<div class="text-center">
+<div class="text">
     <h1 class="display-4">庫存</h1>
     <p class="visually-hidden">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <p>@msg</p>
@@ -13,8 +13,8 @@
             // 每倉都有自己的標題與庫位
             foreach(StorehouseDetail house in storehouses)
             {
-                <h2>@house.Name</h2>
-                <div class="container">
+                <h3>@house.Name</h3>
+                <div class="container mb-5">
                     <div class="row ">
 
                         <!--依照庫位是否含有物料改變外觀與連結--> 
@@ -66,9 +66,8 @@
             var ans = confirm(`確定要將 ${binName} 中物料取出?`)
             if(!ans)
                 return;
-            window.open(`../Export/Index?binName=${binName}`)
+            window.open(`../Export/Index?binName=${binName}`, '_self')
         }
-
     </script>
 }
 

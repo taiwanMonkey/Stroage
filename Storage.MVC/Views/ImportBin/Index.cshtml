@@ -4,6 +4,7 @@
 @model string
 @using Stroage.API.Models
 @{
+    ViewData["Title"] = "入庫";
     string sotrageToken = ViewData["IDtoken"].ToString();
     Storehouse[] houses = (Storehouse[]) ViewData["Houses"];
     Material[] materials = (Material[]) ViewData["Materials"];
