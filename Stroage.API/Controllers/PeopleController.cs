@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Stroage.API.Models;
+using Stroage.API.RequestModels;
 
 namespace Stroage.API.Controllers
 {
@@ -51,7 +52,8 @@ namespace Stroage.API.Controllers
             Guid token = Guid.NewGuid();
             p.Token = token;
             _context.SaveChanges();
-            return Ok(token);
+            return Ok(new LoginResponse 
+                { UserName = p.Name, StorageToken = p.Token?.ToString() });
         }
 
  

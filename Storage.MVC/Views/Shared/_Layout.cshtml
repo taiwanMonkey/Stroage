@@ -31,11 +31,18 @@
                         if(ViewData.ContainsKey("IDtoken"))
                             if(ViewData["IDtoken"] is not null)
                                 idToken = ViewData["IDtoken"]?.ToString();
+                        string userName = string.Empty;
+                        if (ViewData.ContainsKey("S_UserName"))
+                            if (ViewData["S_UserName"] is not null)
+                                userName = ViewData["S_UserName"].ToString();
 
                     }
                             
                         
-                    
+                    @if(userName != string.Empty)
+                    {
+                        <span class="me-lg-2 text-dark">Hello, <b>@userName</b></span>
+                    }
                     @if(string.IsNullOrEmpty(idToken))
                     {
                         <span class="navbar-text m-2">

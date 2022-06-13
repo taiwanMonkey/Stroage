@@ -2,6 +2,7 @@
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Stroage.API.Models;
+using Stroage.API.RequestModels;
 using System.Net;
 using System.Text.Encodings;
 
@@ -33,10 +34,15 @@ namespace Storage.MVC.Controllers
             if(result.StatusCode != System.Net.HttpStatusCode.OK)
                 return RedirectToAction("Index");
             var ctn = await result.Content.ReadAsStringAsync();
-            Response.Cookies.Append("StorageToken", ctn, new CookieOptions
+            var rep = JsonConvert.DeserializeObject<LoginResponse>(ctn);
+            Response.Cookies.Append("StorageToken", rep.StorageToken, new CookieOptions
             {
-                Expires = DateTime.UtcNow.AddMinutes(0.5)
-            }) ;
+                Expires = DateTime.UtcNow.AddMinutes(3)
+            });
+            Response.Cookies.Append("S_UserName", rep.UserName, new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddMinutes(3)
+            });
             return RedirectToAction("Index", "Home");
         }
 

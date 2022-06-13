@@ -1,11 +1,16 @@
-﻿namespace Stroage.API.RequestModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Stroage.API.RequestModels
 {
     public class PutInReqeust
     {
-        public string PersonId { get; set; }
-        public string Password { get; set; }
+        [Required]
+        public string StorageToken { get; set; }
+        [Required]
         public string MaterialDescirption { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public string BinName { get; set; }
     }
 }

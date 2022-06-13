@@ -19,23 +19,41 @@
                         {
                             if(string.IsNullOrEmpty(bin.MaterialDesc))
                             {
-                                <a href="http" >
-                                    <div class="bins col bg-secondary text-light m-1 pt-2 pb-2 rounded hover-overlay ripple pb-4">
-                                        @bin.BinName<br>
-                                    </div>
+                                <a class="bins col bg-secondary text-decoration-none text-light m-1 pt-2 pb-2 rounded hover-overlay ripple pb-4" 
+                                     onclick="Import('@(bin.BinName)')"
+                                     data-binName="@bin.BinName">
+                                    @bin.BinName<br>
                                 </a>
                             }
                             else
                             {
-                                <div class="bins col bg-primary text-light m-1 pt-2 pb-2 rounded hover-overlay ripple">
+                                <a class="bins col bg-primary text-decoration-none text-light m-1 pt-2 pb-2 rounded hover-overlay ripple">
                                         @bin.BinName<br>@bin.MaterialDesc: @bin.Quantity
-                                </div>
+                                </a>
                             }
-                            
                         }
                     </div>
                 </div>
             }
         }
 </div>
+@section Scripts{
+    <script>
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function Import(binName){
+            const uName = getCookie('S_UserName');
+            if(!uName){
+                alert('請先登入再操作');
+                return;
+            }
+            window.open('../home/index', '_self')
+        }
+
+    </script>
+}
 

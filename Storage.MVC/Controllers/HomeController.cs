@@ -43,6 +43,7 @@ namespace Storage.MVC.Controllers
             var json = await msg.Content.ReadAsStringAsync();   
             ViewBag.Storehouses = JsonConvert.DeserializeObject<List<StorehouseDetail>>(json);
             ViewData["IDtoken"] = Request.Cookies["StorageToken"];
+            ViewData["S_UserName"] = Request.Cookies["S_UserName"];
             return View();
         }
 
