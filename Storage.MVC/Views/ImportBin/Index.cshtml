@@ -1,0 +1,75 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model string
+@using Stroage.API.Models
+@{
+    string sotrageToken = ViewData["IDtoken"].ToString();
+    Storehouse[] houses = (Storehouse[]) ViewData["Houses"];
+    Material[] materials = (Material[]) ViewData["Materials"];
+    string hint = ViewData["Hint"].ToString();
+}
+<p class="text-danger">@hint</p>
+<div class="container">
+
+    <form method="post" asp-action="Import">
+        <div class="form-group">
+            <label for="binName">庫位號</label>
+            <select name="binName" id="binName" class="form-select">
+                @foreach(Storehouse house in houses)
+                {
+                    <optgroup label="@house.Name">
+                        @foreach(Bin bin in house.Bins)
+                        {
+                            if (bin.Name == @Model)
+                            {
+                                <option value="@bin.Name" selected> @bin.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@bin.Name"> @bin.Name</option>
+                            }
+                        }
+                    </optgroup>
+                }
+            </select>
+            <br />
+
+        <div class="form-group mb-2">
+            <label for="MaterialDescirption">物料名稱</label>
+            <select name="MaterialDescirption" class="form-select">
+                    @foreach(Material material in materials)
+                    {
+                        <option value="@material.Description">@material.Description</option>
+                    }
+                </select>
+            <br />
+        </div>
+
+        <div class="form-group">
+            <label for="Quantity" >數量</label>
+            <input name="Quantity" id='qty' typeof="number" min="1" max="@int.MaxValue" class="form-control" required/>
+        </div>
+        <input type="text" name="StorageToken" class="visually-hidden" value="@sotrageToken" />
+        <div class="form-group m-2 justify-content-center align-content-center">
+            <input type="submit" id="summitBtn"  value="入庫" class="pt-2 btn btn-primary float-end"/>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    <script>
+        let qtyEle = document.getElementById('qty');
+        let summitBtn =  document.getElementById('summitBtn');
+        qtyEle.onchange = () => {
+            if(qtyEle.value > 1 && qtyEle.value < 40000)
+            {
+                summitBtn.disabled = false;
+            }
+            else
+            {
+                summitBtn.disabled = true;
+                qtyEle.value = 0;
+            }
+        }
+    </script>
+}

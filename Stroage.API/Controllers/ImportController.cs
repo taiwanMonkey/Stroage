@@ -20,6 +20,40 @@ namespace Stroage.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            int? id = null;
+            Storehouse[] shList = await GetEmptyBinsOfHouses();
+            Material[] materials = await GetMaterialsAsync();
+            ImportPreparation preparation = new ImportPreparation()
+            {
+                Houses = shList,
+                Materials = materials
+            };
+            return Ok(preparation);
+        }
+
+        private async Task<Storehouse[]> GetEmptyBinsOfHouses()
+        {
+            var shList = await _context.Storehouses
+                .AsNoTracking()
+                .Include(sh => sh.Bins)
+                .ThenInclude(b => b.Pack)
+                .ToArrayAsync();
+            foreach (Storehouse storehouse in shList)
+            {
+                storehouse.Bins = storehouse.Bins.Where(b => b.Pack is null).ToList();
+            }
+
+            return shList;
+        }
+
+        private async Task<Material[]> GetMaterialsAsync()
+        {
+            return await _context.Materials.ToArrayAsync();
+        }
+
         [HttpPost]
         public async Task<IActionResult> PutIn(PutInReqeust model)
         {

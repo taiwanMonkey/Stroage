@@ -10,24 +10,27 @@
     <p class="visually-hidden">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <p>@msg</p>
         @if(storehouses is not null ){
+            // 每倉都有自己的標題與庫位
             foreach(StorehouseDetail house in storehouses)
             {
                 <h2>@house.Name</h2>
                 <div class="container">
                     <div class="row ">
+
+                        <!--依照庫位是否含有物料改變外觀與連結--> 
                         @foreach(BinDetail bin in house.Bins)
                         {
                             if(string.IsNullOrEmpty(bin.MaterialDesc))
                             {
                                 <a class="bins col bg-secondary text-decoration-none text-light m-1 pt-2 pb-2 rounded hover-overlay ripple pb-4" 
-                                     onclick="Import('@(bin.BinName)')"
-                                     data-binName="@bin.BinName">
+                                   onclick="Import('@(bin.BinName)')">
                                     @bin.BinName<br>
                                 </a>
                             }
                             else
                             {
-                                <a class="bins col bg-primary text-decoration-none text-light m-1 pt-2 pb-2 rounded hover-overlay ripple">
+                                <a class="bins col bg-primary text-decoration-none text-light m-1 pt-2 pb-2 rounded hover-overlay ripple"
+                                   onclick="Export('@bin.BinName')">
                                         @bin.BinName<br>@bin.MaterialDesc: @bin.Quantity
                                 </a>
                             }
@@ -51,7 +54,19 @@
                 alert('請先登入再操作');
                 return;
             }
-            window.open('../home/index', '_self')
+            window.open(`../ImportBin/index?binName=${binName}`, '_self');
+        }
+
+        function Export(binName){
+            const uName = getCookie('S_UserName');
+            if(!uName){
+                alert('請先登入再操作');
+                return;
+            }
+            var ans = confirm(`確定要將 ${binName} 中物料取出?`)
+            if(!ans)
+                return;
+            window.open(`../Export/Index?binName=${binName}`)
         }
 
     </script>

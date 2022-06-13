@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
-        name: "StorageAPI",
+        name: "StorageMVC",
         policy => {
             policy.WithOrigins("https://localhost:7114");
         });

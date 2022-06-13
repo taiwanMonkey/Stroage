@@ -2,9 +2,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient();
-var app = builder.Build();
 
+builder.Services.AddHttpClient();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: "StorageAPI",
+        policy => {
+            policy.WithOrigins("https://localhost:7065");
+        });
+    
+});
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -18,7 +27,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

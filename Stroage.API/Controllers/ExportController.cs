@@ -54,6 +54,29 @@ namespace Stroage.API.Controllers
             return Ok(new { exportings, lackMaterials });
         }
 
+        [HttpPost]
+        [Route("Single")]
+        public async Task<IActionResult> ExportSingle(ExportSingleParam param)
+        {
+            bool inValid = param is null || string.IsNullOrEmpty(param.BinName) || string.IsNullOrEmpty(param.StorageToken);
+            if (inValid)
+                return NotFound();
+
+            var person = _context.People.FirstOrDefault(p => p.Token.ToString() == param.StorageToken);
+            if(person is null)
+                return Unauthorized();
+
+            var bin = _context.Bins.Include(b => b.Pack).FirstOrDefault(b => b.Name == param.BinName);
+            if (bin is null || bin.Pack is null)
+                return NotFound();
+
+            LogExport(bin, person);
+            bin.InTime = null;
+            bin.PackId = null;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         private void TakeOnePack(ExportRequest model, List<Bin> selectedBins, ExportDemand demand, List<Bin> availbles, List<ExportingBin> exportings)
         {
             Bin? chosenBin = availbles.First();

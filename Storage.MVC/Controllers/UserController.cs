@@ -37,11 +37,12 @@ namespace Storage.MVC.Controllers
             var rep = JsonConvert.DeserializeObject<LoginResponse>(ctn);
             Response.Cookies.Append("StorageToken", rep.StorageToken, new CookieOptions
             {
-                Expires = DateTime.UtcNow.AddMinutes(3)
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                IsEssential = true
             });
             Response.Cookies.Append("S_UserName", rep.UserName, new CookieOptions
             {
-                Expires = DateTime.UtcNow.AddMinutes(3)
+                Expires = DateTime.UtcNow.AddMinutes(30)
             });
             return RedirectToAction("Index", "Home");
         }
@@ -87,6 +88,7 @@ namespace Storage.MVC.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("StorageToken");
+            Response.Cookies.Delete("S_UserName");
             return RedirectToAction("Index", "Home");
         }
     }
